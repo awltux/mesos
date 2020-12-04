@@ -522,7 +522,11 @@ static Try<Nothing> executeFileOperation(const ContainerFileOperation& op)
       // is EXDEV, in which case a rename is a copy+unlink.
       if (result.isError()) {
         Option<int> status = os::spawn(
-            "mv", {"mv", "-f", op.rename().source(), op.rename().target()});
+            "mv", {"mv", "-f", op.rename().source(), op.rename().target()}
+#ifdef __WINDOWS__
+			 , None()
+#endif // __WINDOWS__
+		);
 
         if (status.isNone()) {
           return Error(
@@ -890,7 +894,12 @@ int MesosContainerizerLaunch::execute()
         args.push_back(arg);
       }
 
-      status = os::spawn(command.value(), args);
+      status = os::spawn(
+	    command.value(), args
+#ifdef __WINDOWS__
+        , None()
+#endif // __WINDOWS__
+	  );
     }
 
     if (status.isNone() || !WSUCCEEDED(status.get())) {

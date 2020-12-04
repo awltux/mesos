@@ -412,7 +412,7 @@ inline Try<ProcessData> create_process(
 inline Option<int> spawn(
     const std::string& command,
     const std::vector<std::string>& arguments,
-    const Option<std::map<std::string, std::string>>& environment = None())
+    const Option<std::map<std::string, std::string>>& environment)
 {
   using namespace os::windows::internal;
 
@@ -443,7 +443,7 @@ inline int execvp(
     const std::string& file,
     const std::vector<std::string>& argv)
 {
-  exit(os::spawn(file, argv).getOrElse(-1));
+  exit(os::spawn(file, argv, None()).getOrElse(-1));
   return -1;
 }
 
