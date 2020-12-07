@@ -75,7 +75,16 @@ inline Option<int> spawn(
 // TODO(bmahler): Probably we shouldn't provide this windows
 // emulation and should instead have the caller use windows
 // subprocess functions directly?
+#ifdef __WINDOWS__
+inline int execvp(
+    const std::string& file,
+    const std::vector<std::string>& argv);
+#else
 inline int execvp(const char* file, char* const argv[]);
+#endif // __WINDOWS__
+
+
+
 
 
 // This function is a portable version of execvpe ('p' means searching
@@ -108,7 +117,15 @@ inline int execvp(const char* file, char* const argv[]);
 // TODO(bmahler): Probably we shouldn't provide this windows
 // emulation and should instead have the caller use windows
 // subprocess functions directly?
+#ifdef __WINDOWS__
+inline int execvpe(
+    const std::string& file,
+    const std::vector<std::string>& argv,
+    const std::map<std::string, std::string>& envp);
+#else
 inline int execvpe(const char* file, char** argv, char** envp);
+#endif // __WINDOWS__
+
 
 } // namespace os {
 
