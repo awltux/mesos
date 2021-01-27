@@ -3839,7 +3839,7 @@ void Slave::launchExecutor(
       flags,
       executorInfo,
       executor->directory,
-      info.id(),
+      info,
       self(),
       authenticationToken.get(),
       framework->info.checkpoint());
@@ -11381,7 +11381,7 @@ map<string, string> executorEnvironment(
     const Flags& flags,
     const ExecutorInfo& executorInfo,
     const string& directory,
-    const SlaveID& slaveId,
+    const SlaveInfo& slaveInfo,
     const PID<Slave>& slavePid,
     const Option<Secret>& authenticationToken,
     bool checkpoint)
@@ -11441,10 +11441,15 @@ map<string, string> executorEnvironment(
   environment["MESOS_FRAMEWORK_ID"] = executorInfo.framework_id().value();
   environment["MESOS_EXECUTOR_ID"] = executorInfo.executor_id().value();
   environment["MESOS_DIRECTORY"] = directory;
-  environment["MESOS_SLAVE_ID"] = slaveId.value();
   environment["MESOS_SLAVE_PID"] = stringify(slavePid);
-  environment["MESOS_AGENT_ENDPOINT"] = stringify(slavePid.address);
+
+  const string agent_endpoint = slaveInfo.has_hostname() ? 
+      slaveInfo.hostname() + ":" + std::to_string(slaveInfo.port()) :
+      stringify(slavePid.address);
+  environment["MESOS_AGENT_ENDPOINT"] = agent_endpoint;
   environment["MESOS_CHECKPOINT"] = checkpoint ? "1" : "0";
+  environment["MESOS_SLAVE_ID"] = slaveInfo.id().value();
+
   environment["MESOS_HTTP_COMMAND_EXECUTOR"] =
     flags.http_command_executor ? "1" : "0";
 

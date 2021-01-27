@@ -1311,7 +1311,7 @@ std::map<std::string, std::string> executorEnvironment(
     const Flags& flags,
     const ExecutorInfo& executorInfo,
     const std::string& directory,
-    const SlaveID& slaveId,
+    const SlaveInfo& slaveInfo,
     const process::PID<Slave>& slavePid,
     const Option<Secret>& authenticationToken,
     bool checkpoint);
