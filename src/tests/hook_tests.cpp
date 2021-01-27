@@ -382,13 +382,13 @@ TEST_F_TEMP_DISABLED_ON_WINDOWS(
       "executor",
       "test $FOO = 'bar'");
 
-  SlaveID slaveId = SlaveID();
+  SlaveInfo slaveInfo = SlaveInfo();
 
   std::map<string, string> environment = executorEnvironment(
       flags,
       executorInfo,
       directory,
-      slaveId,
+      slaveInfo,
       PID<Slave>(),
       None(),
       false);
