@@ -11441,6 +11441,7 @@ map<string, string> executorEnvironment(
   environment["MESOS_FRAMEWORK_ID"] = executorInfo.framework_id().value();
   environment["MESOS_EXECUTOR_ID"] = executorInfo.executor_id().value();
   environment["MESOS_DIRECTORY"] = directory;
+  environment["MESOS_SLAVE_ID"] = slaveInfo.id().value();
   environment["MESOS_SLAVE_PID"] = stringify(slavePid);
 
   const string agent_endpoint = slaveInfo.has_hostname() ? 
